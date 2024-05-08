@@ -63,7 +63,11 @@ def data_proc(filename, save_filename, threshold=0):
         num += 1
         if len(text) < threshold:
             continue
-        line = get_pattern(text)
+        line = {}
+        # line = get_pattern(text)
+        line['text'] = text.strip()
+        line['remove_all'] = remove_all(text).strip()
+        line['normal_form'] = get_normal_form(remove_all(text).strip())
         line["date"] = m["date"]
         line["message_id"] = m["message_id"]
         line["user_id"] = m["user_id"]
@@ -231,10 +235,11 @@ def get_normal_form_mas(words):
     return result
 
 
-# def get_normal_form(words):
-#     morph = pymorphy2.MorphAnalyzer()
-#     p = morph.parse(words)[0]
-#     return p.normal_form
+def get_normal_form(words):
+    import pymorphy2
+    morph = pymorphy2.MorphAnalyzer()
+    p = morph.parse(words)[0]
+    return p.normal_form
 
 
 def load_data(filename='data.txt'):
@@ -381,7 +386,7 @@ def convertJsonMessages2text(filename):
         text += f"{convertMs2String(m['date'])} {m['message_id']}  {m['user_id']} {m['reply_message_id']}  {m['text']}  <br>\n"
     return text
 
-def nast_data_proc(filename, save_filename, threshold=0):
+def ex_data_proc(filename, save_filename, threshold=0):
     # with open("./uploads/"+filename+".json", "r", encoding="UTF8") as file:
     with open(filename, "r", encoding="UTF8") as file:
         content = file.read()
@@ -458,8 +463,8 @@ if __name__ == '__main__':
     
     filename="d:/ml/chat/andromedica1.json"
     filename="d:/ml/chat/andromedica_small.json"
-    save_filename="./nast_data_proc.json"
-    nast_data_proc(filename, save_filename, 32)
+    save_filename="./dasha_data_proc.json"
+    ex_data_proc(filename, save_filename, 32)
     
     
 
