@@ -21,7 +21,6 @@ def data_proc(filename, save_filename, threshold=0):
         if len(text) < threshold:
             continue
         line = {}
-        # line = get_pattern(text)
         line['text'] = text.strip()
         line['remove_all'] = remove_all(text).strip()
         line['normal_form'] = get_normal_form(remove_all(text).strip())
@@ -31,13 +30,39 @@ def data_proc(filename, save_filename, threshold=0):
         line["reply_message_id"] = m["reply_message_id"]
         proc_messages.append(line)
     jsonstring = json.dumps(proc_messages, ensure_ascii=False)
-    # print(jsonstring)
-    # name = filename.split(".")[0]
-    # with open(f"./uploads/{name}_proc.json", "w", encoding="UTF8") as file:
     with open(save_filename, "w", encoding="UTF8") as file:
         file.write(jsonstring)
-    # return proc_messages
 
+def find_data(save_filename, find_text, save_score_filename="./dasha_find_data_proc.json", threshold=32):
+    with open(save_filename, "r", encoding="UTF8") as file:
+        content = file.read()
+    messages = json.loads(content)
+    text = ""
+    count_messages = len(messages)
+    print(count_messages)
+    num = 0
+    proc_messages = []  
+    find_text=get_normal_form(remove_all(find_text).strip())
+    # print(find_text)
+    for m in messages:
+        print(f"{num / count_messages * 100}     {count_messages-num}     {num} / {count_messages}")
+        num += 1
+        if len(text) < threshold:
+            continue
+        line = {}
+        line['text'] = m['text']
+        line['remove_all'] = m['remove_all']
+        line['normal_form'] = m['normal_form']
+        line["date"] = m["date"]
+        line["message_id"] = m["message_id"]
+        line["user_id"] = m["user_id"]
+        line["reply_message_id"] = m["reply_message_id"]
+        line["score"] = calc_intersection_text(line['text'], find_text)
+        proc_messages.append(line)
+    jsonstring = json.dumps(proc_messages, ensure_ascii=False)
+    with open(save_score_filename, "w", encoding="UTF8") as file:
+        file.write(jsonstring)
+    
 def load_data_proc(filename):
     with open(filename, "r", encoding="UTF8") as file:
         content = file.read()
@@ -207,16 +232,12 @@ def get_lemScore(text1, messages):
 
 if __name__ == '__main__':
     # nltk_download()
-    s1 = """
+    find_text = """
     Любые упаковочные коробки из картона для вашего бизнеса! О цене договоримся
     """
     filename="d:/ml/chat/andromedica1.json"   
     filename="d:/ml/chat/tvchat.json"   
     save_filename="./dasha_data_proc.json"   
-    data_proc(filename, save_filename, 32)
+    #data_proc(filename, save_filename, 32)
+    find_data(save_filename, find_text)
     
-    
-
-    # data_proc(filename, save_filename, 32) #
-    # find_cl(save_filename)#
-    # find_type("./find_data.json", 'RAKE')#
