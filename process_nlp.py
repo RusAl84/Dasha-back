@@ -4,49 +4,6 @@ import nltk
 import pymorphy2
 
 
-db_fileName = "./data_cl.json"
-
-# def add_data(text):
-#     import pathlib
-#     path = pathlib.Path(db_fileName)
-#     content = []
-#     data = get_pattern(text)
-#     data = add_print_text(data)
-#     if path.exists():
-#         with open(db_fileName, "r", encoding="UTF8") as file:
-#             jsoncontent = file.read()
-#         content = json.loads(jsoncontent)
-#         content.append(data)
-#         jsonstring = json.dumps(content, ensure_ascii=False)
-#         with open(db_fileName, "w", encoding="UTF8") as file:
-#             file.write(jsonstring)
-#     else:
-#         content.append(data)
-#         jsonstring = json.dumps(content, ensure_ascii=False)
-#         with open(db_fileName, "w", encoding="UTF8") as file:
-#             file.write(jsonstring)
-#     return content
-
-
-# def load_db():
-#     import pathlib
-#     path = pathlib.Path(db_fileName)
-#     if path.exists():
-#         with open(db_fileName, "r", encoding="UTF8") as file:
-#             jsoncontent = file.read()
-#         content = json.loads(jsoncontent)
-#         return content
-#     else:
-#         return [{}]
-    
-
-# def clear_db():
-#     import pathlib
-#     path = pathlib.Path(db_fileName)
-#     if path.exists():
-#         os.remove(db_fileName)
-
-
 def data_proc(filename, save_filename, threshold=0):
     # with open("./uploads/"+filename+".json", "r", encoding="UTF8") as file:
     with open(filename, "r", encoding="UTF8") as file:
@@ -148,83 +105,6 @@ def remove_all(data):
     return data
 
 
-# def get_RAKE(text):
-#     from rake_nltk import Metric, Rake
-#     r = Rake(language="russian")
-#     r.extract_keywords_from_text(text)
-#     numOfKeywords = 20
-#     keywords = r.get_ranked_phrases()[:numOfKeywords]
-#     return keywords
-
-
-# def get_YAKE(text):
-#     import yake
-#     language = "ru"
-#     max_ngram_size = 3
-#     deduplication_threshold = 0.9
-#     numOfKeywords = 20
-#     custom_kw_extractor = yake.KeywordExtractor(lan=language, n=max_ngram_size, dedupLim=deduplication_threshold, top=numOfKeywords, features=None)
-#     keywords = custom_kw_extractor.extract_keywords(text)
-#     l=[]
-#     for item in keywords:
-#         l.append(list(item))
-#     return l
-
-
-# def get_KeyBERT(text):
-#     from keybert import KeyBERT
-#     kw_model = KeyBERT()
-#     # keywords = kw_model.extract_keywords(doc)
-#     numOfKeywords = 20
-#     keywords = kw_model.extract_keywords(text, keyphrase_ngram_range=(1, 3), stop_words='english',
-#                             use_maxsum=True, nr_candidates=20, top_n=numOfKeywords)
-#     l=[]
-#     for item in keywords:
-#         l.append(list(item))
-#     return l
-
-
-# def set_scores(l):
-#     count = len(l)
-#     new_l=[]
-#     import random
-#     random.uniform(0, 1)
-#     for item in l:
-#         new_l.append([item, random.uniform(0, 1)])
-#     return new_l
-
-# def get_pattern(text):
-#     line = {}
-#     line['text'] = text.strip()
-#     line['remove_all'] = remove_all(text).strip()
-#     line['normal_form'] = get_normal_form(remove_all(text).strip())
-#     line['RAKE'] = set_scores(get_RAKE(text))
-#     line['YAKE'] = get_YAKE(text)
-#     line['BERT'] = get_KeyBERT(text)
-#     return line
-
-
-# def add_print_text(data):
-#     RAKE_text =[]
-#     for item in data['RAKE']:
-#         RAKE_text.append(item[0])
-#     YAKE_text =[]
-#     for item in data['YAKE']:
-#         YAKE_text.append(item[0])    
-#     BERT_text =[]
-#     for item in data['BERT']:
-#         BERT_text.append(item[0])
-    
-#     str1 = str(f"Исходный текст: {data['text']} \n\n"
-#             f" Нормальная форма: {data['normal_form']} \n\n"
-#             f" RAKE: {RAKE_text} \n\n"
-#             f" YAKE: {YAKE_text} \n\n"
-#             f" BERT: {BERT_text} \n\n")
-#     data['print_text'] = str1
-#     # print(str1)
-#     return data
-
-
 def get_normal_form_mas(words):
     import pymorphy2
     morph = pymorphy2.MorphAnalyzer()
@@ -265,9 +145,9 @@ def remove_paragraf_and_toLower(text):
     return text
 
 
-# def nltk_download():
-#     nltk.download('stopwords')
-#     nltk.download('punkt')
+def nltk_download():
+    nltk.download('stopwords')
+    nltk.download('punkt')
     
 
 def calc_intersection_list(list1, list2):
@@ -287,89 +167,6 @@ def calc_intersection_text(text1, text2):
                 count += 1
     return count
 
-# def calc_score(data1, data2):
-#     pass
-
-
-# def find_cl(filename):
-#     messages = load_data_proc(filename)
-#     data_cl = load_db()
-#     cl_messages = []
-#     # def calc_intersection_all(text1, l2):
-#     #     max_counts = 0
-#     #     for item in l2:
-#     #         current_counts = calc_intersection_one(text1, item['normal_form'])
-#     #         if current_counts > max_counts:
-#     #             max_counts = current_counts
-#     #     return max_counts
-#     # counts = []
-#     find_data = []
-#     for m in messages:
-#         item = m
-#         num = 0
-#         item["RAKE_COUNT"] = 0
-#         item["RAKE_NUM"] = 0
-#         item["YAKE_COUNT"] = 0
-#         item["YAKE_NUM"] = 0
-#         item["BERT_COUNT"] = 0
-#         item["BERT_NUM"] = 0
-#         for cl in data_cl:
-#             intersect_RAKE = calc_intersection_list(m['RAKE'], cl['RAKE'])
-#             if intersect_RAKE>item["RAKE_COUNT"]:
-#                 item["RAKE_COUNT"] = intersect_RAKE
-#                 item["RAKE_NUM"] = num
-#             intersect_YAKE = calc_intersection_list(m['YAKE'], cl['YAKE'])
-#             if intersect_YAKE>item["YAKE_COUNT"]:
-#                 item["YAKE_COUNT"] = intersect_YAKE
-#                 item["YAKE_NUM"] = num
-#             intersect_BERT = calc_intersection_list(m['BERT'], cl['BERT'])
-#             if intersect_BERT>item["BERT_COUNT"]:
-#                 item["BERT_COUNT"] = intersect_BERT
-#                 item["BERT_NUM"] = num
-#             num += 1
-#         find_data.append(item)
-#     jsonstring = json.dumps(find_data, ensure_ascii=False)
-#     with open("./find_data.json", "w", encoding="UTF8") as file:
-#         file.write(jsonstring)
-
-
-# def find_type(filename, type='RAKE'):
-#     messages = load_data_proc(filename)
-#     find_data = []
-#     RAKE_set=set() 
-#     YAKE_set=set() 
-#     BERT_set=set() 
-#     for m in messages:
-#         RAKE_set.add(m['RAKE_COUNT'])
-#         YAKE_set.add(m['YAKE_COUNT'])
-#         BERT_set.add(m['BERT_COUNT'])
-#     RAKE_s = max(RAKE_set)
-#     YAKE_s = max(YAKE_set)
-#     BERT_s = max(BERT_set)
-#     # RAKE_set=sorted(RAKE_set, reverse=True)
-#     # YAKE_set=sorted(YAKE_set, reverse=True)
-#     # BERT_set=sorted(BERT_set, reverse=True)
-#     counts=3
-#     if type == 'RAKE':
-#         for m in messages:
-#             if m['RAKE_COUNT'] >= RAKE_s-counts:
-#                 m = add_print_text(m)
-#                 find_data.append(m)
-#     if type == 'YAKE':
-#         for m in messages:
-#             if m['YAKE_COUNT'] >= YAKE_s-counts:
-#                 m = add_print_text(m)
-#                 find_data.append(m)                    
-#     if type == 'BERT':
-#         for m in messages:
-#             if m['BERT_COUNT'] >= BERT_s-counts:
-#                 m = add_print_text(m)
-#                 find_data.append(m)                     
-#     jsonstring = json.dumps(find_data, ensure_ascii=False)
-#     with open("./find_d.json", "w", encoding="UTF8") as file:
-#         file.write(jsonstring)
-#     return jsonstring    
-
 
 def convertMs2String(milliseconds):
     import datetime
@@ -386,40 +183,6 @@ def convertJsonMessages2text(filename):
         text += f"{convertMs2String(m['date'])} {m['message_id']}  {m['user_id']} {m['reply_message_id']}  {m['text']}  <br>\n"
     return text
 
-def ex_data_proc(filename, save_filename, threshold=0):
-    # with open("./uploads/"+filename+".json", "r", encoding="UTF8") as file:
-    with open(filename, "r", encoding="UTF8") as file:
-        content = file.read()
-    messages = json.loads(content)
-    text = ""
-    count_messages = len(messages)
-    print(count_messages)
-    num = 0
-    proc_messages = []  
-    for m in messages:
-        text = m["text"]
-        num += 1
-        if len(text) < threshold:
-            continue
-        line = {}
-        line["date"] = m["date"]
-        line["message_id"] = m["message_id"]
-        line["user_id"] = m["user_id"]
-        line["reply_message_id"] = m["reply_message_id"]
-        line["text"] = text
-        # line["fuzzScore"] = get_fuzzScore(text, messages)
-        lemScore = get_lemScore(text, messages)
-        line["lemScore"] = lemScore
-        print(f"{num / count_messages * 100}     {count_messages-num}     {num} / {count_messages}   lemScore={lemScore}")
-        proc_messages.append(line)
-    proc_messages = sorted(proc_messages, key=lambda d: d['lemScore'])
-    jsonstring = json.dumps(proc_messages, ensure_ascii=False)
-    # print(jsonstring)
-    # name = filename.split(".")[0]
-    # with open(f"./uploads/{name}_proc.json", "w", encoding="UTF8") as file:
-    with open(save_filename, "w", encoding="UTF8") as file:
-        file.write(jsonstring)
-    # return proc_messages
 
 def get_fuzzScore(text1, messages,treshold=80):
     from fuzzywuzzy import fuzz #https://habr.com/ru/articles/491448/
@@ -445,22 +208,8 @@ def get_lemScore(text1, messages):
 if __name__ == '__main__':
     # nltk_download()
     s1 = """
-     Дарим 1000 бонусов за 1-ю авторизацию в мобильном приложении до 22.03.2023. Используйте бонусы на онлайн покупки. Clck.ru/33gyhM
+    Любые упаковочные коробки из картона для вашего бизнеса! О цене договоримся
     """
-    #add_data(s1)
-    # t = get_pattern(data)
-    # print(t)
-    
-    # from fuzzywuzzy import fuzz #https://habr.com/ru/articles/491448/
-    # score = fuzz.WRatio('Привет наш мир', '!ПриВЕт, наш мир!')
-    # print(score)
-    
-
-    # filename="d:/ml/chat/andromedica.json"
-    
-    
-    
-    
     filename="d:/ml/chat/andromedica1.json"   
     filename="d:/ml/chat/tvchat.json"   
     save_filename="./dasha_data_proc.json"   
