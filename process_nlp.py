@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import os
 import json
 import nltk
@@ -33,7 +34,7 @@ def data_proc(filename, save_filename, threshold=0):
     with open(save_filename, "w", encoding="UTF8") as file:
         file.write(jsonstring)
 
-def find_data(save_filename, find_text, save_score_filename="./dasha_find_data_proc.json", threshold=32):
+def find_data(save_filename, find_text, save_score_filename="./dasha_find_data_proc.json", threshold=0):
     with open(save_filename, "r", encoding="UTF8") as file:
         content = file.read()
     messages = json.loads(content)
@@ -43,7 +44,6 @@ def find_data(save_filename, find_text, save_score_filename="./dasha_find_data_p
     num = 0
     proc_messages = []  
     find_text=get_normal_form(remove_all(find_text).strip())
-    # print(find_text)
     for m in messages:
         print(f"{num / count_messages * 100}     {count_messages-num}     {num} / {count_messages}")
         num += 1
@@ -57,12 +57,13 @@ def find_data(save_filename, find_text, save_score_filename="./dasha_find_data_p
         line["message_id"] = m["message_id"]
         line["user_id"] = m["user_id"]
         line["reply_message_id"] = m["reply_message_id"]
-        line["score"] = calc_intersection_text(line['text'], find_text)
+        line["score"] = calc_intersection_text(line['normal_form'], find_text)
         proc_messages.append(line)
+    proc_messages = sorted(proc_messages, key=lambda d: d['score'])
     jsonstring = json.dumps(proc_messages, ensure_ascii=False)
     with open(save_score_filename, "w", encoding="UTF8") as file:
         file.write(jsonstring)
-    
+    print(find_text)
 def load_data_proc(filename):
     with open(filename, "r", encoding="UTF8") as file:
         content = file.read()
@@ -234,10 +235,19 @@ if __name__ == '__main__':
     # nltk_download()
     find_text = """
     Любые упаковочные коробки из картона для вашего бизнеса! О цене договоримся
+    """    
+    find_text = """
+    Вы летите на самолете в командировку, либо по семейным делам
+    и тут вдруг Даша и Алина и кошка не съели кошку
     """
     filename="d:/ml/chat/andromedica1.json"   
     filename="d:/ml/chat/tvchat.json"   
     save_filename="./dasha_data_proc.json"   
     #data_proc(filename, save_filename, 32)
     find_data(save_filename, find_text)
-    
+    # s1 = """
+    # Кошка заходит в кафе, заказывает кофе и пирожное. Официант стоит с открытым ртом. Кошка:\n— Что?\n— Эээ... вы кошка!\n— Да.\n— Вы разговариваете!\n— Какая новость. Вы принесете мой заказ или нет?\n— Ооо, простите, пожалуйста, конечно, принесу. Я просто никогда раньше не видел...\n— А я тут раньше и не бывала. Я ищу работу, была на собеседовании, решила вот выпить кофе.\nОфициант возвращается с заказом, видит кошку, строчащую что-то на клавиатуре ноутбука.\n\n— Ваш кофе. Эээ... я тут подумал... Вы ведь ищете работу, да? Просто мой дядя — директор цирка, и он с удовольствием взял бы вас на отличную зарплату!\n\n— Цирк? — говорит кошка. — Это где арена, купол, оркестр?\n\n— Да!\n\n— Клоуны, акробаты, слоны?\n\n— Да!\n\n— Сахарная вата, попкорн, леденцы на палочке?\n\n— Да-да-да!\n\n— Звучит заманчиво! А на хрена им программист?
+    # """
+    # find_text=get_normal_form(remove_all(find_text).strip())
+    # s1=get_normal_form(remove_all(s1).strip())
+    # print(calc_intersection_text(s1, find_text))
