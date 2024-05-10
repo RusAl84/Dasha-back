@@ -1,7 +1,7 @@
 import os
 import json
-# import nltk
-# import pymorphy2
+import nltk
+import pymorphy2
 
 
 db_fileName = "./data_cl.json"
@@ -373,7 +373,7 @@ def calc_intersection_text(text1, text2):
 
 def convertMs2String(milliseconds):
     import datetime
-    dt = datetime.datetime.fromtimestamp(milliseconds )
+    dt = datetime.datetime.fromtimestamp(milliseconds)
     return dt
 
 
@@ -456,15 +456,15 @@ if __name__ == '__main__':
     # print(score)
     
 
-    # filename="d:/ml/chat/andromedica_small.json"
+    # filename="d:/ml/chat/andromedica.json"
     
     
     
     
-    filename="d:/ml/chat/andromedica1.json"
-    filename="d:/ml/chat/andromedica_small.json"
-    save_filename="./dasha_data_proc.json"
-    ex_data_proc(filename, save_filename, 32)
+    filename="d:/ml/chat/andromedica1.json"   
+    filename="d:/ml/chat/tvchat.json"   
+    save_filename="./dasha_data_proc.json"   
+    data_proc(filename, save_filename, 32)
     
     
 
