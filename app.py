@@ -34,39 +34,19 @@ def uploadae():
     return d
 
 
-@app.route("/get_pattern", methods=['POST'])
-def get_pattern():
-    msg = request.json
-    print(msg)
-    data = process_nlp.get_pattern(msg['text'])
-    data = process_nlp.add_print_text(data)
-    print(data['print_text'])
-    return data
-
-
-@app.route("/get_pattern_add", methods=['POST'])
-def get_pattern_add():
-    msg = request.json
-    print(msg)
-    data = process_nlp.add_data(msg['text'])
-    data = process_nlp.add_print_text(data)
-    print()
-    print(data)
-    return data
-
-
 @app.route('/findae', methods=['POST'])
 def findae():
     #     if request.method == 'POST':
     msg = request.json
     print(msg)
-    filename = msg['filename']
-    ttype=msg['type']
+    # filename = msg['filename']
+    find_text=msg['find_text']
     # filename="d:/ml/chat/andromedica1.json"
     save_filename="./data_proc.json"
     # data_proc(filename, save_filename, 32)
     # find_cl(save_filename)
-    data = process_nlp.find_type("./find_data.json", ttype)
+    save_filename="./dasha_data_proc.json"   
+    data = process_nlp.find_data(save_filename, find_text)
     print(data)
     return data
 
@@ -77,12 +57,6 @@ def clear_db():
     save_filename="./dasha_data_proc.json"   
     process_nlp.data_proc(filename, save_filename, 32)
     return "ok data_proc"
-
-
-@app.route("/load_db", methods=['GET'])
-def load_db():
-    data = process_nlp.load_db()
-    return data
 
 
 if __name__ == '__main__':

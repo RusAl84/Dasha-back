@@ -64,11 +64,7 @@ def find_data(save_filename, find_text, save_score_filename="./dasha_find_data_p
     with open(save_score_filename, "w", encoding="UTF8") as file:
         file.write(jsonstring)
     print(find_text)
-def load_data_proc(filename):
-    with open(filename, "r", encoding="UTF8") as file:
-        content = file.read()
-    messages = json.loads(content)
-    return messages
+    return jsonstring
 
 
 def remove_digit(data):
