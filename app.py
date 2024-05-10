@@ -34,8 +34,8 @@ def uploadae():
     return d
 
 
-@app.route('/findae', methods=['POST'])
-def findae():
+@app.route('/find_data', methods=['POST'])
+def find_data():
     #     if request.method == 'POST':
     msg = request.json
     print(msg)

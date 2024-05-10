@@ -58,6 +58,8 @@ def find_data(save_filename, find_text, save_score_filename="./dasha_find_data_p
         line["user_id"] = m["user_id"]
         line["reply_message_id"] = m["reply_message_id"]
         line["score"] = calc_intersection_text(line['normal_form'], find_text)
+        if line["score"] < 1:
+            continue
         proc_messages.append(line)
     proc_messages = sorted(proc_messages, key=lambda d: d['score'])
     jsonstring = json.dumps(proc_messages, ensure_ascii=False)
