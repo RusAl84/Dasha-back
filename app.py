@@ -13,7 +13,7 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 
 @app.route('/')
 def dafault_route():
-    return 'API'
+    return 'DASHA API'
 
 
 @app.route('/uploadae', methods=['POST'])
@@ -71,10 +71,12 @@ def findae():
     return data
 
 
-@app.route("/clear_db", methods=['GET'])
+@app.route("/data_proc", methods=['GET'])
 def clear_db():
-    process_nlp.clear_db()
-    return "ok clear_db"
+    filename="d:/ml/chat/tvchat.json"   
+    save_filename="./dasha_data_proc.json"   
+    process_nlp.data_proc(filename, save_filename, 32)
+    return "ok data_proc"
 
 
 @app.route("/load_db", methods=['GET'])
