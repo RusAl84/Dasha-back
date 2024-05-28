@@ -34,6 +34,9 @@ def data_proc(filename, save_filename, threshold=0):
     with open(save_filename, "w", encoding="UTF8") as file:
         file.write(jsonstring)
 
+def get_sig(text):
+    return get_normal_form(remove_all(text).strip())
+
 def find_data(save_filename, find_text, save_score_filename="./dasha_find_data_proc.json", threshold=0):
     with open(save_filename, "r", encoding="UTF8") as file:
         content = file.read()

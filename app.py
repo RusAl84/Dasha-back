@@ -50,6 +50,16 @@ def find_data():
     print(data)
     return data
 
+@app.route('/get_sig', methods=['POST'])
+def get_sig():
+    #     if request.method == 'POST':
+    msg = request.json
+    print(msg)
+    text=msg['get_sig']
+    data = process_nlp.get_sig(text)
+    print(data)
+    return data
+
 
 @app.route("/data_proc", methods=['GET'])
 def clear_db():
