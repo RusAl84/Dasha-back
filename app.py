@@ -54,8 +54,8 @@ def find_data():
 def get_sig():
     #     if request.method == 'POST':
     msg = request.json
-    print(msg)
-    text=msg['get_sig']
+    # print(msg)
+    text=msg['text']
     data = process_nlp.get_sig(text)
     print(data)
     return data
