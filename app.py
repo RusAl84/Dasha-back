@@ -46,7 +46,8 @@ def find_data():
     # data_proc(filename, save_filename, 32)
     # find_cl(save_filename)
     save_filename="./dasha_data_proc.json"   
-    data = process_nlp.find_data(save_filename, find_text)
+    # data = process_nlp.find_data(save_filename, find_text)
+    data = process_nlp.find_data(save_filename, find_text, save_score_filename="./dasha_find_data_proc.json", threshold=0, fuzz=3)
     print(data)
     return data
 
