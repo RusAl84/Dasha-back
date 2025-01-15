@@ -13,7 +13,7 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 
 @app.route('/')
 def dafault_route():
-    return 'DASHA API'
+    return 'lt API'
 
 
 @app.route('/uploadae', methods=['POST'])
@@ -40,23 +40,25 @@ def find_data():
     msg = request.json
     print(msg)
     # filename = msg['filename']
-    find_text=msg['find_text']
+    find_text = msg['find_text']
     # filename="d:/ml/chat/andromedica1.json"
-    save_filename="./data_proc.json"
+    save_filename = "./data_proc.json"
     # data_proc(filename, save_filename, 32)
     # find_cl(save_filename)
-    save_filename="./dasha_data_proc.json"   
+    save_filename = "./lt_data_proc.json"
     # data = process_nlp.find_data(save_filename, find_text)
-    data = process_nlp.find_data(save_filename, find_text, save_score_filename="./dasha_find_data_proc.json", threshold=0, fuzz=3)
+    data = process_nlp.find_data(
+        save_filename, find_text, save_score_filename="./lt_find_data_proc.json", threshold=0, fuzz=3)
     print(data)
     return data
+
 
 @app.route('/get_sig', methods=['POST'])
 def get_sig():
     #     if request.method == 'POST':
     msg = request.json
     # print(msg)
-    text=msg['text']
+    text = msg['text']
     data = process_nlp.get_sig(text)
     print(data)
     return data
@@ -64,8 +66,8 @@ def get_sig():
 
 @app.route("/data_proc", methods=['GET'])
 def clear_db():
-    filename="d:/ml/chat/tvchat.json"   
-    save_filename="./dasha_data_proc.json"   
+    filename = "d:/ml/chat/tvchat.json"
+    save_filename = "./lt_data_proc.json"
     process_nlp.data_proc(filename, save_filename, 32)
     return "ok data_proc"
 
